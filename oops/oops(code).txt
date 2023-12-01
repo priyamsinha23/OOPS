@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+    public static class FileProcessingException extends Exception {
+        public FileProcessingException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    public static class CustomFileReader {
+
+        public static String readData(String filePath) throws FileProcessingException {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+                return content.toString();
+            } catch (FileNotFoundException e) {
+                throw new FileProcessingException("File not found: " + filePath, e);
+            } catch (IOException e) {
+                throw new FileProcessingException("Error reading file: " + filePath, e);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String filePath = "C:\\Users\\hp\\Desktop\\ques3\\ques3.txt";
+
+        try {
+            String fileContent = CustomFileReader.readData(filePath);
+            System.out.println("File content:\n" + fileContent);
+        } catch (FileProcessingException e) {
+            System.err.println("Error processing file: " + e.getMessage());
+            e.printStackTrace(); 
+            
+        }
+    }
+
+    }
